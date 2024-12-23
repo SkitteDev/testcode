@@ -1,19 +1,169 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Example Plugin</title>
+<html><head><base href="." />
+<meta charset="UTF-8">
+<title>Perfect Popup Window Example</title>
+<style>
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.popup-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.7);
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    width: 90%;
+    max-width: 500px;
+    opacity: 0;
+    animation: popIn 0.4s ease-out forwards;
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.popup-title {
+    font-size: 1.5em;
+    color: #333;
+    margin: 0;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s;
+}
+
+.close-btn:hover {
+    color: #ff4444;
+}
+
+.trigger-btn {
+    padding: 12px 24px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.trigger-btn:hover {
+    background-color: #45a049;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.7);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.content-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
+
+</style>
 </head>
 <body>
-<!-- Example Content in your GitHub File -->
-<div style="text-align: center;">
-  <h1 style="color: blue;">Hello, World!</h1>
-  <p>This is a test code dynamically loaded from GitHub.</p>
-  <script>
-    console.log('GitHub script executed successfully!');
-  </script>
+<div class="content-wrapper">
+    <!-- Changed to use addEventListener instead of inline onclick -->
+    <button class="trigger-btn" id="openButton">Open Popup</button>
 </div>
 
-</body>
-</html>
+<div class="popup-overlay" id="popupOverlay">
+    <div class="popup-container">
+        <div class="popup-header">
+            <h2 class="popup-title">Welcome to Our Popup!</h2>
+            <!-- Changed to use addEventListener instead of inline onclick -->
+            <button class="close-btn" id="closeButton">&times;</button>
+        </div>
+        <div class="popup-content">
+            <p>This is a perfect popup window with smooth animations and a modern design. You can customize this content to show any information you want!</p>
+            <p>Features of this popup:</p>
+            <ul>
+                <li>Smooth fade-in animation</li>
+                <li>Scale animation on open</li>
+                <li>Responsive design</li>
+                <li>Click outside to close</li>
+                <li>Modern styling</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+// Wait for DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Get elements
+    const popupOverlay = document.getElementById('popupOverlay');
+    const openButton = document.getElementById('openButton');
+    const closeButton = document.getElementById('closeButton');
+
+    // Open popup function
+    function openPopup() {
+        popupOverlay.style.display = 'block';
+        document.body.style.overflow = 'hidden'; // Prevent scrolling when popup is open
+    }
+
+    // Close popup function
+    function closePopup() {
+        popupOverlay.style.display = 'none';
+        document.body.style.overflow = 'auto'; // Restore scrolling
+    }
+
+    // Add event listeners
+    openButton.addEventListener('click', openPopup);
+    closeButton.addEventListener('click', closePopup);
+
+    // Close popup when clicking outside
+    popupOverlay.addEventListener('click', function(event) {
+        if (event.target === this) {
+            closePopup();
+        }
+    });
+
+    // Close popup with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closePopup();
+        }
+    });
+});
+</script>
+
+</body></html>
