@@ -24,8 +24,8 @@
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     z-index: 1001;
-    width: 90%;
-    max-width: 500px;
+    width: 95%;
+    max-width: 100%;
     opacity: 0;
     animation: popIn 0.4s ease-out forwards;
 }
@@ -93,15 +93,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #f5f5f5;
+    min-height: 100vh;
 }
 
 </style>
 </head>
 <body>
 <div class="content-wrapper">
-    <!-- Changed to use addEventListener instead of inline onclick -->
     <button class="trigger-btn" id="openButton">Open Popup</button>
 </div>
 
@@ -109,7 +107,6 @@
     <div class="popup-container">
         <div class="popup-header">
             <h2 class="popup-title">Welcome to Our Popup!</h2>
-            <!-- Changed to use addEventListener instead of inline onclick -->
             <button class="close-btn" id="closeButton">&times;</button>
         </div>
         <div class="popup-content">
@@ -127,37 +124,30 @@
 </div>
 
 <script>
-// Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Get elements
     const popupOverlay = document.getElementById('popupOverlay');
     const openButton = document.getElementById('openButton');
     const closeButton = document.getElementById('closeButton');
 
-    // Open popup function
     function openPopup() {
         popupOverlay.style.display = 'block';
-        document.body.style.overflow = 'hidden'; // Prevent scrolling when popup is open
+        document.body.style.overflow = 'hidden';
     }
 
-    // Close popup function
     function closePopup() {
         popupOverlay.style.display = 'none';
-        document.body.style.overflow = 'auto'; // Restore scrolling
+        document.body.style.overflow = 'auto';
     }
 
-    // Add event listeners
     openButton.addEventListener('click', openPopup);
     closeButton.addEventListener('click', closePopup);
 
-    // Close popup when clicking outside
     popupOverlay.addEventListener('click', function(event) {
         if (event.target === this) {
             closePopup();
         }
     });
 
-    // Close popup with Escape key
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
             closePopup();
