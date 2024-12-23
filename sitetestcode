@@ -4,31 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Example Plugin</title>
-  <style>
-
-    .button {
-      display: inline-block;
-      padding: 10px 20px;
-      margin-top: 20px;
-      background-color: #007BFF;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-    .button:hover {
-      background-color: #0056b3;
-    }
-  </style>
 </head>
 <body>
-  <h1>Welcome to My Plugin</h1>
-  <p>This is content loaded dynamically from GitHub.</p>
-  <a href="#" class="button" onclick="showAlert()">Click Me</a>
-
+<!-- Example Content in your GitHub File -->
+<div style="text-align: center;">
+  <h1 style="color: blue;">Hello, World!</h1>
+  <p>This is a test code dynamically loaded from GitHub.</p>
   <script>
-    function showAlert() {
-      alert('Hello! This button is working fine.');
-    }
+    console.log('GitHub script executed successfully!');
   </script>
+</div>
+
 </body>
 </html>
